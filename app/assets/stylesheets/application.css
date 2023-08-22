@@ -13,3 +13,17 @@
  *= require_tree .
  *= require_self
  */
+
+
+a.prompt {
+  color: inherit;
+  text-decoration: none;
+  background-color: #EEEEEE;
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  display: block;
+}
+
+a.prompt:hover {
+  background-color: #DDDDDD;
+}

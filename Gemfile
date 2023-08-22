@@ -9,8 +9,8 @@ gem "rails", "~> 7.0.7"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
-# Use sqlite3 as the database for Active Record
-gem "sqlite3", "~> 1.4"
+# Use postgresql as the database for Active Record
+gem "pg", "~> 1.1"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
@@ -70,3 +70,9 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+gem "mocha", group: "test"
+gem "rails-controller-testing", group: "test"
+gem "elasticsearch"
+gem "elasticsearch-model", git: "https://github.com/elasticsearch/elasticsearch-rails.git", branch: "main"
+gem "elasticsearch-rails", git: "https://github.com/elasticsearch/elasticsearch-rails.git", branch: "main"
+gem "httparty"

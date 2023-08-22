@@ -1,0 +1,81 @@
+version: '3'
+services:
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: prompts_search
+      POSTGRES_PASSWORD: prompts_search
+    volumes:
+      - prompts_search_data:/var/lib/postgresql/data
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+
+  web:
+    build: .
+    command: bundle exec rails server -p 3000 -b '0.0.0.0'
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - elasticsearch
+    volumes:
+      - .:/app
+    environment:
+      DATABASE_URL: postgresql://prompts_search:prompts_search@db:5432/prompts_search
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+
+  migrate:
+    build: .
+    command: bundle exec rails db:migrate
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    environment:
+      DATABASE_URL: postgresql://prompts_search:prompts_search@db:5432/prompts_search
+
+  seed:
+    build: .
+    command: bundle exec rails db:seed
+    depends_on:
+      - db
+      - elasticsearch
+    volumes:
+      - .:/app
+    environment:
+      DATABASE_URL: postgresql://prompts_search:prompts_search@db:5432/prompts_search
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+
+  test:
+    build: .
+    command: bundle exec rails test
+    depends_on:
+      - db
+      - elasticsearch
+    volumes:
+      - .:/app
+    environment:
+      DATABASE_URL: postgresql://prompts_search:prompts_search@db:5432/prompts_search
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+
+  console:
+    build: .
+    command: bundle exec rails console
+    depends_on:
+      - db
+      - elasticsearch
+    volumes:
+      - .:/app
+    environment:
+      DATABASE_URL: postgresql://prompts_search:prompts_search@db:5432/prompts_search
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+
+volumes:
+  prompts_search_data:

@@ -1,7 +1,14 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
+require 'httparty'
+
+url = "https://datasets-server.huggingface.co/first-rows?dataset=Gustavosta%2FStable-Diffusion-Prompts&config=default&split=test"
+
+response = HTTParty.get(url)
+data = JSON.parse(response.body)
+
+Prompt.delete_all
+
+data["rows"].each do |item|
+  body = item["row"]["Prompt"]
+
+  Prompt.create!(body: body)
+end

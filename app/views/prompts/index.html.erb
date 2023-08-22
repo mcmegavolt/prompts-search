@@ -1,0 +1,24 @@
+<p style="color: green"><%= notice %></p>
+
+<h1><%= controller.action_name == 'search' ? 'Search results' : 'Prompts' %></h1>
+
+<hr>
+
+<%= form_tag search_prompts_path, method: 'get' do %>
+  <%= label_tag :query %>
+  <%= text_field_tag :q, params[:q] %>
+  <%= submit_tag :search %>
+  <%= link_to "Clear", prompts_path %>
+<% end %>
+
+<hr>
+
+<div id="prompts">
+  <% @prompts.each do |prompt| %>
+    <%= link_to prompt, class: "prompt" do %>
+      <%= render prompt %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= link_to "New prompt", new_prompt_path %>
